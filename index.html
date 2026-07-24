@@ -210,7 +210,8 @@
     grid-template-columns:repeat(2,1fr);
     gap:14px;
   }
-  @media(min-width:640px){.date-grid{grid-template-columns:repeat(4,1fr);}}
+  @media(min-width:640px){.date-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(min-width:960px){.date-grid{grid-template-columns:repeat(4,1fr);}}
   .date-card{
     position:relative;
     aspect-ratio:3/4;
@@ -219,6 +220,7 @@
     cursor:pointer;
     transition:border-color .2s, transform .2s;
     background:var(--asphalt-2);
+    display:block;
   }
   .date-card:hover{
     border-color:var(--accent);
@@ -258,6 +260,14 @@
     color:var(--accent);
     letter-spacing:0.1em;
     margin-top:4px;
+  }
+  .date-label .location{
+    font-family:'Inter',sans-serif;
+    font-size:11px;
+    color:var(--grey);
+    margin-top:4px;
+    text-transform:none;
+    letter-spacing:0;
   }
 
   .pricing-table{
@@ -339,6 +349,7 @@
     margin-top:48px;color:var(--grey);font-size:13px;
   }
 </style>
+<base target="_blank">
 </head>
 <body>
 
@@ -356,24 +367,24 @@
 
 <header class="hero">
   <div class="hero-stripe"></div>
-  
+
   <div class="hero-slider" id="heroSlider">
     <div class="hero-slide active" style="background-image:url('https://res.cloudinary.com/mwrhgtnl/image/upload/v1784851406/hero1_hq63dz.jpg');"></div>
     <div class="hero-slide" style="background-image:url('https://res.cloudinary.com/mwrhgtnl/image/upload/v1784851407/hero2_ditojd.jpg');"></div>
     <div class="hero-slide" style="background-image:url('https://res.cloudinary.com/mwrhgtnl/image/upload/v1784851428/hero3_dq6xu6.jpg');"></div>
     <div class="hero-slide" style="background-image:url('https://res.cloudinary.com/mwrhgtnl/image/upload/v1784851428/hero4_il0lkk.jpg');"></div>
   </div>
-  
+
   <div class="wrap hero-content">
     <div class="eyebrow">ALETSPHOTOS · 2026</div>
     <h1>Cada curva<br>tiene <em>su foto.</em></h1>
-    <p class="lead">Fotografía de motorsport desde el asfalto. Busca tu número, escribe por Instagram y llévate tu momento en carrera.</p>
+    <p class="lead">Fotografía de motorsport desde el asfalto. Busca tu sesión, mira las fotos y escríbeme por Instagram para comprarlas.</p>
     <div class="hero-cta">
-      <a href="#tus-fotos" class="btn btn-primary">Ver galería</a>
+      <a href="#tus-fotos" class="btn btn-primary">Ver sesiones</a>
       <a href="#precios" class="btn btn-ghost">Precios</a>
     </div>
   </div>
-  
+
   <div class="hero-dots" id="heroDots">
     <div class="hero-dot active" onclick="goToSlide(0)"></div>
     <div class="hero-dot" onclick="goToSlide(1)"></div>
@@ -404,34 +415,43 @@
         <h2>Busca tu sesión</h2>
       </div>
     </div>
-    <p class="desc">Selecciona la fecha de la sesión en la que saliste. Dentro encontrarás todas las fotos organizadas por franja horaria.</p>
+    <p class="desc">Haz click en la fecha para ver todas las fotos de esa sesión. Se abrirá tu galería en Google Photos.</p>
 
     <div class="date-grid">
-      <a href="sesion-12-julio.html" class="date-card">
+      <!-- 
+      === CÓMO AÑADIR UNA NUEVA SESIÓN ===
+      1. Crea un álbum en Google Photos
+      2. Sube las fotos
+      3. Comparte el álbum (Cualquiera con el enlace)
+      4. Copia el enlace
+      5. Sube una foto de portada a Cloudinary y copia su URL
+      6. Copia un bloque <a> completo y pega debajo
+      7. Cambia:
+         - href="ENLACE_DE_GOOGLE_PHOTOS"
+         - src="URL_DE_CLOUDINARY_PORTADA"
+         - El día, mes, año y ubicación
+      -->
+
+      <a href="https://photos.google.com/share/ABCDEF123456" target="_blank" rel="noopener" class="date-card">
         <img src="https://res.cloudinary.com/mwrhgtnl/image/upload/v1784851406/hero1_hq63dz.jpg" alt="12 Julio 2026">
         <div class="date-label">
           <div class="day">12</div>
           <div class="month">JULIO 2026</div>
+          <div class="location">Cebreros · Ávila</div>
         </div>
       </a>
-      <a href="sesion-05-julio.html" class="date-card">
+
+      <!-- EJEMPLO: copia desde aquí... -->
+      <!-- <a href="PEGA_ENLACE_GOOGLE_PHOTOS_AQUI" target="_blank" rel="noopener" class="date-card">
+        <img src="PEGA_URL_CLOUDINARY_AQUI" alt="FECHA">
         <div class="date-label">
           <div class="day">05</div>
           <div class="month">JULIO 2026</div>
+          <div class="location">Ubicación</div>
         </div>
-      </a>
-      <a href="sesion-28-junio.html" class="date-card">
-        <div class="date-label">
-          <div class="day">28</div>
-          <div class="month">JUNIO 2026</div>
-        </div>
-      </a>
-      <a href="sesion-21-junio.html" class="date-card">
-        <div class="date-label">
-          <div class="day">21</div>
-          <div class="month">JUNIO 2026</div>
-        </div>
-      </a>
+      </a> -->
+      <!-- ...hasta aquí para añadir una nueva sesión -->
+
     </div>
   </div>
 </section>
@@ -459,12 +479,12 @@
       <div class="step">
         <span class="num">01</span>
         <h3>Busca tu sesión</h3>
-        <p>Selecciona la fecha y la franja horaria en la que saliste.</p>
+        <p>Haz click en la fecha en la que saliste y mira las fotos en la galería.</p>
       </div>
       <div class="step">
         <span class="num">02</span>
         <h3>Escríbeme por Instagram</h3>
-        <p>Mándame un mensaje a <a href="https://instagram.com/aletsphotos" target="_blank" rel="noopener" class="ig-link-inline">@aletsphotos</a> con el código de la foto que quieras.</p>
+        <p>Mándame un mensaje a <a href="https://instagram.com/aletsphotos" target="_blank" rel="noopener" class="ig-link-inline">@aletsphotos</a> con la foto que quieras.</p>
       </div>
       <div class="step">
         <span class="num">03</span>
