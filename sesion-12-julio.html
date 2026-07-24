@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALETSPHOTOS — Fotografía de Motorsport</title>
+<meta name="description" content="Fotografía de motorsport y eventos privados. Alex, ALETSPHOTOS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --asphalt: #121214;
+    --asphalt-2: #1b1b1e;
+    --off-white: #F2F0EB;
+    --grey: #8b8b90;
+    --accent: #FF5A1F;
+    --accent-2: #F4C430;
+    --line: #2c2c30;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--asphalt);
+    color:var(--off-white);
+    font-family:'Inter',sans-serif;
+    line-height:1.5;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.02em;
+  }
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1100px;margin:0 auto;padding:0 24px;}
+
+  /* ---- NAV ---- */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(18,18,20,0.85);
+    backdrop-filter:blur(6px);
+    border-bottom:1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;align-items:center;justify-content:space-between;
+    padding-top:16px;padding-bottom:16px;
+  }
+  .brand{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:20px;
+    letter-spacing:0.05em;
+    cursor:pointer;
+  }
+  .brand span{color:var(--accent);}
+  .navlinks{display:flex;gap:28px;font-size:14px;text-transform:uppercase;letter-spacing:0.04em;}
+  .navlinks a{color:var(--grey);transition:color .2s;}
+  .navlinks a:hover{color:var(--off-white);}
+  .navlinks{display:none;}
+  @media(min-width:720px){.navlinks{display:flex;}}
+
+  /* ---- HERO ---- */
+  header.hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:flex-end;
+    padding-bottom:80px;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,90,31,0.06) 0px, rgba(255,90,31,0.06) 2px, transparent 2px, transparent 60px),
+      linear-gradient(180deg, #0d0d0f 0%, #121214 60%, #16161a 100%);
+    border-bottom:1px solid var(--line);
+    overflow:hidden;
+  }
+  .hero-stripe{
+    position:absolute;top:0;right:0;bottom:0;
+    width:38%;
+    background:repeating-linear-gradient(-45deg, var(--asphalt-2) 0 28px, #1f1f23 28px 56px);
+    clip-path:polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+    opacity:0.9;
+  }
+  .hero-content{position:relative;z-index:2;}
+  .eyebrow{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:13px;
+    letter-spacing:0.15em;
+    margin-bottom:18px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .eyebrow::before{
+    content:"";width:28px;height:2px;background:var(--accent);display:inline-block;
+  }
+  .hero h1{
+    font-size:clamp(42px, 8vw, 92px);
+    line-height:0.98;
+    font-weight:700;
+    max-width:780px;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--accent);
+  }
+  .hero p.lead{
+    margin-top:24px;
+    max-width:480px;
+    color:var(--grey);
+    font-size:17px;
+  }
+  .hero-cta{
+    margin-top:36px;
+    display:flex;gap:16px;flex-wrap:wrap;
+  }
+  .btn{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    font-size:14px;
+    padding:14px 28px;
+    border-radius:2px;
+    display:inline-block;
+    transition:transform .15s ease, background .15s ease;
+  }
+  .btn-primary{background:var(--accent);color:#141414;font-weight:600;}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{border:1px solid var(--line);color:var(--off-white);}
+  .btn-ghost:hover{border-color:var(--accent);}
+
+  /* Hero slider */
+  .hero-slider{
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    z-index:1;
+    overflow:hidden;
+  }
+  .hero-slide{
+    position:absolute;
+    top:0;left:0;right:0;bottom:0;
+    background-size:cover;
+    background-position:center;
+    opacity:0;
+    transition:opacity 1s ease-in-out;
+  }
+  .hero-slide.active{
+    opacity:0.25;
+  }
+  .hero-dots{
+    position:absolute;
+    bottom:24px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:3;
+    display:flex;
+    gap:10px;
+  }
+  .hero-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:rgba(255,255,255,0.3);
+    border:2px solid transparent;
+    cursor:pointer;
+    transition:all .3s ease;
+  }
+  .hero-dot.active{
+    background:var(--accent);
+    border-color:var(--accent);
+  }
+  .hero-dot:hover{
+    background:rgba(255,255,255,0.6);
+  }
+
+  /* ---- SECTION GENERIC ---- */
+  section{padding:96px 0;border-bottom:1px solid var(--line);}
+  .kicker{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:13px;
+    letter-spacing:0.15em;
+    margin-bottom:12px;
+  }
+  section h2{
+    font-size:clamp(28px,4vw,44px);
+    margin-bottom:20px;
+    max-width:680px;
+  }
+  section p.desc{color:var(--grey);max-width:620px;font-size:16px;margin-bottom:48px;}
+
+  /* ---- ABOUT ---- */
+  .about-grid{
+    display:grid;grid-template-columns:1fr;gap:40px;
+  }
+  @media(min-width:800px){.about-grid{grid-template-columns:1.1fr 0.9fr;align-items:start;}}
+  .about-text p{color:var(--off-white);opacity:0.85;margin-bottom:16px;font-size:16px;max-width:520px;}
+  .about-photo{
+    border:1px solid var(--line);
+    background:var(--asphalt-2);
+    aspect-ratio:4/5;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:var(--grey);
+    font-family:'JetBrains Mono',monospace;
+    font-size:14px;
+    text-align:center;
+    padding:24px;
+  }
+
+  /* ---- GALLERY ---- */
+  .gallery-head{
+    display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px;margin-bottom:40px;
+  }
+  .date-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:14px;
+  }
+  @media(min-width:640px){.date-grid{grid-template-columns:repeat(4,1fr);}}
+  .date-card{
+    position:relative;
+    aspect-ratio:3/4;
+    background:
+      repeating-linear-gradient(135deg, #202024 0 10px, #1a1a1d 10px 20px);
+    overflow:hidden;
+    border:1px solid var(--line);
+    cursor:pointer;
+    transition:border-color .2s, transform .2s;
+  }
+  .date-card:hover{
+    border-color:var(--accent);
+    transform:translateY(-4px);
+  }
+  .date-card::after{
+    content:"";
+    position:absolute;inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+  }
+  .date-card img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .date-label{
+    position:absolute;
+    bottom:0;left:0;right:0;
+    z-index:2;
+    padding:16px;
+    text-align:center;
+  }
+  .date-label .day{
+    font-family:'Oswald',sans-serif;
+    font-size:28px;
+    font-weight:700;
+    color:var(--off-white);
+    line-height:1;
+  }
+  .date-label .month{
+    font-family:'JetBrains Mono',monospace;
+    font-size:12px;
+    color:var(--accent);
+    letter-spacing:0.1em;
+    margin-top:4px;
+  }
+  .date-placeholder{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:#38383d;
+    font-family:'Oswald',sans-serif;
+    font-size:13px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    text-align:center;
+    padding:16px;
+  }
+
+  /* ---- PRICING ---- */
+  .pricing-table{
+    width:100%;border-collapse:collapse;
+    margin-top:8px;
+  }
+  .pricing-table th, .pricing-table td{
+    text-align:left;padding:16px 12px;border-bottom:1px solid var(--line);
+    font-size:15px;
+  }
+  .pricing-table th{
+    font-family:'JetBrains Mono',monospace;
+    text-transform:uppercase;font-size:12px;letter-spacing:0.08em;color:var(--grey);
+    font-weight:500;
+  }
+  .pricing-table td.pack{font-family:'Oswald',sans-serif;font-weight:600;font-size:17px;}
+  .pricing-table td.price{color:var(--accent-2);font-family:'JetBrains Mono',monospace;font-weight:700;}
+  .pricing-table tr:last-child td{border-bottom:none;}
+
+  /* ---- HOW TO BUY ---- */
+  .steps{
+    display:grid;grid-template-columns:1fr;gap:24px;
+  }
+  @media(min-width:760px){.steps{grid-template-columns:repeat(3,1fr);}}
+  .step{border:1px solid var(--line);padding:24px;background:var(--asphalt-2);}
+  .step .num{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--accent);
+    font-size:13px;margin-bottom:14px;display:block;
+  }
+  .step h3{font-size:19px;margin-bottom:10px;}
+  .step p{color:var(--grey);font-size:14px;}
+  .ig-link-inline{
+    color:var(--accent);
+    font-weight:600;
+    transition:color .2s;
+  }
+  .ig-link-inline:hover{
+    color:var(--accent-2);
+  }
+
+  /* ---- OTHER WORK ---- */
+  .other-grid{
+    display:grid;grid-template-columns:1fr;gap:14px;
+  }
+  @media(min-width:720px){.other-grid{grid-template-columns:repeat(3,1fr);}}
+  .other-card{
+    border:1px solid var(--line);
+    aspect-ratio:3/4;
+    position:relative;
+    background:linear-gradient(160deg,#1a1a1d,#101012);
+    display:flex;align-items:flex-end;padding:20px;
+  }
+  .other-card h3{font-size:20px;}
+  .other-card span{
+    font-family:'JetBrains Mono',monospace;
+    color:var(--grey);font-size:12px;display:block;margin-top:4px;
+  }
+
+  /* ---- CONTACT / FOOTER ---- */
+  footer{padding:90px 0 40px;border-bottom:none;}
+  .contact-box{
+    border:1px solid var(--line);
+    background:var(--asphalt-2);
+    padding:48px;
+    text-align:left;
+  }
+  @media(min-width:760px){.contact-box{padding:64px;}}
+  .contact-box h2{margin-bottom:14px;}
+  .contact-box p{color:var(--grey);max-width:480px;margin-bottom:32px;}
+  .ig-link{
+    font-family:'Oswald',sans-serif;
+    font-size:22px;
+    display:inline-flex;align-items:center;gap:10px;
+    color:var(--off-white);
+    border-bottom:2px solid var(--accent);
+    padding-bottom:4px;
+  }
+  .ig-link:hover{color:var(--accent-2);}
+  .foot-bottom{
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    margin-top:48px;color:var(--grey);font-size:13px;
+  }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a href="#" class="brand" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">ALETS<span>PHOTOS</span></a>
+    <div class="navlinks">
+      <a href="#tus-fotos">Tus fotos</a>
+      <a href="#precios">Precios</a>
+      <a href="#trabajo">Otros trabajos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-stripe"></div>
+
+  <div class="hero-slider" id="heroSlider">
+    <div class="hero-slide active" style="background-image:url('hero1.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('hero2.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('hero3.jpg');"></div>
+    <div class="hero-slide" style="background-image:url('hero4.jpg');"></div>
+  </div>
+
+  <div class="wrap hero-content">
+    <div class="eyebrow">ALETSPHOTOS · 2026</div>
+    <h1>Cada curva<br>tiene <em>su foto.</em></h1>
+    <p class="lead">Fotografía de motorsport desde el asfalto. Busca tu número, escribe por Instagram y llévate tu momento en carrera.</p>
+    <div class="hero-cta">
+      <a href="#tus-fotos" class="btn btn-primary">Ver galería</a>
+      <a href="#precios" class="btn btn-ghost">Precios</a>
+    </div>
+  </div>
+
+  <div class="hero-dots" id="heroDots">
+    <div class="hero-dot active" onclick="goToSlide(0)"></div>
+    <div class="hero-dot" onclick="goToSlide(1)"></div>
+    <div class="hero-dot" onclick="goToSlide(2)"></div>
+    <div class="hero-dot" onclick="goToSlide(3)"></div>
+  </div>
+</header>
+
+<section id="sobre-mi">
+  <div class="wrap about-grid">
+    <div class="about-text">
+      <div class="kicker">QUIÉN DISPARA</div>
+      <h2>Alex — ALETSPHOTOS</h2>
+      <p>Diseñador gráfico de formación, fotógrafo de motorsport por vocación. Salgo a curva un par de findes al mes a cazar el instante exacto: el ángulo de la moto, el punto de frenada, el humo de neumático.</p>
+      <p>También disparo bodas, conciertos y eventos gaming — si buscas cobertura fotográfica para tu evento privado, hablamos por Instagram.</p>
+    </div>
+    <div class="about-photo">
+      <span>// Sube tu foto aquí<br>(reemplaza este div por &lt;img src="tu-foto.jpg" style="width:100%;height:100%;object-fit:cover;"&gt;)</span>
+    </div>
+  </div>
+</section>
+
+<section id="tus-fotos">
+  <div class="wrap">
+    <div class="gallery-head">
+      <div>
+        <div class="kicker">TUS FOTOS</div>
+        <h2>Busca tu sesión</h2>
+      </div>
+    </div>
+    <p class="desc">Selecciona la fecha de la sesión en la que saliste. Dentro encontrarás todas las fotos de ese día organizadas para que puedas localizar la tuya fácilmente.</p>
+
+    <div class="date-grid">
+      <a href="sesion-12-julio.html" class="date-card">
+        <div class="date-placeholder">Sube foto portada</div>
+        <div class="date-label">
+          <div class="day">12</div>
+          <div class="month">JULIO 2026</div>
+        </div>
+      </a>
+      <a href="sesion-05-julio.html" class="date-card">
+        <div class="date-placeholder">Sube foto portada</div>
+        <div class="date-label">
+          <div class="day">05</div>
+          <div class="month">JULIO 2026</div>
+        </div>
+      </a>
+      <a href="sesion-28-junio.html" class="date-card">
+        <div class="date-placeholder">Sube foto portada</div>
+        <div class="date-label">
+          <div class="day">28</div>
+          <div class="month">JUNIO 2026</div>
+        </div>
+      </a>
+      <a href="sesion-21-junio.html" class="date-card">
+        <div class="date-placeholder">Sube foto portada</div>
+        <div class="date-label">
+          <div class="day">21</div>
+          <div class="month">JUNIO 2026</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section id="precios">
+  <div class="wrap">
+    <div class="kicker">TARIFAS</div>
+    <h2>Precios por volumen</h2>
+    <p class="desc">Cuanto más pidas, menos pagas por foto. Packs pensados para grupos de moteros que salen juntos de ruta.</p>
+    <table class="pricing-table">
+      <tr><th>Pack</th><th>Precio total</th><th>Precio por foto</th></tr>
+      <tr><td class="pack">1 foto</td><td class="price">5€</td><td>5€</td></tr>
+      <tr><td class="pack">3 fotos</td><td class="price">13,5€</td><td>4,5€</td></tr>
+      <tr><td class="pack">5 fotos</td><td class="price">20€</td><td>4€</td></tr>
+      <tr><td class="pack">10 fotos</td><td class="price">35€</td><td>3,5€</td></tr>
+    </table>
+  </div>
+</section>
+
+<section id="como-comprar">
+  <div class="wrap">
+    <div class="kicker">PROCESO</div>
+    <h2>Cómo comprar tu foto</h2>
+    <div class="steps">
+      <div class="step">
+        <span class="num">01</span>
+        <h3>Busca tu número</h3>
+        <p>Recorre la galería y localiza el código de tu foto (ej. WRC014).</p>
+      </div>
+      <div class="step">
+        <span class="num">02</span>
+        <h3>Escríbeme por Instagram</h3>
+        <p>Mándame un mensaje a <a href="https://instagram.com/aletsphotos" target="_blank" rel="noopener" class="ig-link-inline">@aletsphotos</a> con el número y el pack que quieras.</p>
+      </div>
+      <div class="step">
+        <span class="num">03</span>
+        <h3>Pago y entrega</h3>
+        <p>Confirmo precio, pagas por Bizum o transferencia, y te entrego la foto editada sin marca de agua.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="trabajo">
+  <div class="wrap">
+    <div class="kicker">MÁS ALLÁ DEL ASFALTO</div>
+    <h2>Otros trabajos</h2>
+    <p class="desc">Cobertura fotográfica para eventos y sesiones privadas.</p>
+    <div class="other-grid">
+      <div class="other-card"><div><h3>Bodas</h3><span>Reportaje completo</span></div></div>
+      <div class="other-card"><div><h3>Conciertos</h3><span>Cobertura en directo</span></div></div>
+      <div class="other-card"><div><h3>Eventos gaming</h3><span>Torneos y streams</span></div></div>
+    </div>
+  </div>
+</section>
+
+<footer id="contacto">
+  <div class="wrap">
+    <div class="contact-box">
+      <div class="kicker">HABLEMOS</div>
+      <h2>¿Buscas tu foto o quieres contratarme?</h2>
+      <p>Todo el contacto pasa por Instagram: consultas, compras y presupuestos para eventos privados.</p>
+      <a class="ig-link" href="https://instagram.com/aletsphotos" target="_blank" rel="noopener">→ @aletsphotos</a>
+      <div class="foot-bottom">
+        <span>ALETSPHOTOS © 2026</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  const totalSlides = slides.length;
+
+  function goToSlide(index) {
+    slides[currentSlide].classList.remove('active');
+    dots[currentSlide].classList.remove('active');
+    currentSlide = index;
+    slides[currentSlide].classList.add('active');
+    dots[currentSlide].classList.add('active');
+  }
+
+  function nextSlide() {
+    let next = (currentSlide + 1) % totalSlides;
+    goToSlide(next);
+  }
+
+  setInterval(nextSlide, 5000);
+</script>
+
+</body>
+</html>
